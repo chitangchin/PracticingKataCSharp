@@ -18,6 +18,7 @@ namespace ClassLibrary2
     public class A 
     {
         int n1, n2;
+        protected int x = 123;
         public A()
         {
             Console.WriteLine("Default Constructor");
@@ -28,6 +29,15 @@ namespace ClassLibrary2
             n2 = j;
             Console.WriteLine("Parameterized Constructor");
             Console.WriteLine(n1 + n2);
+        }
+        public virtual void Swap()
+        {
+            Console.WriteLine("Swap function of base class (A) invoked");
+            Console.WriteLine("Before swap: num1 = {0} and num2 = {1}", n1, n2);
+
+            // swapping
+            (n2, n1) = (n1, n2);
+            Console.WriteLine("After swap: num1 = {0} and num2 = {1}", n1, n2);
         }
     }
 
@@ -46,14 +56,13 @@ namespace ClassLibrary2
     public class Person
     {
         public string? Name { get; set; } = null;
-        private readonly int _socialSecurity = 0;
         public virtual void Speak()
         {
             Console.WriteLine("Woof");
         }
 
     }
-    public struct PointStruct(double x, double y)
+    public readonly struct PointStruct(double x, double y)
     {
         public readonly double Sum { get; } = x + y;
     }
@@ -65,11 +74,23 @@ namespace ClassLibrary2
         public readonly double Angle { get; } = Math.Atan2(y, x) * (180 / Math.PI);
     }
 
-    public class WierdSum(double x, double y) : Person
-    { 
-        public override void Speak()
+    public class Point
+    {
+        protected int x;
+        protected int y;
+    }
+
+    public class DerivedPoint : Point
+    {
+        public static void Test()
         {
-            Console.WriteLine("Hello");
+            var dpoint = new DerivedPoint
+            {
+                // Direct access to protected members.
+                x = 10,
+                y = 15
+            };
+            Console.WriteLine($"x = {dpoint.x}, y = {dpoint.y}");
         }
     }
 }
